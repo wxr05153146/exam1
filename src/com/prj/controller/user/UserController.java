@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.smartcardio.ATR;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.util.Random;
 
 @Controller
@@ -44,6 +47,9 @@ public class UserController {
     @ResponseBody
     @RequestMapping("/login")
     public String login(User user, HttpSession session, String yzm ){
+        //提交的密码也进行md5加密
+        user.setPwd(string2MD5(user.getPwd()));
+
         User login= userServer.login(user);
         if (login!=null && yzm.equals(strCode)){
             session.setAttribute("loginUser",login);
@@ -52,12 +58,43 @@ public class UserController {
 
         return "loginError";
     }
-    @RequestMapping("/query")
-    public String query(HttpSession session, Classes classes){
-        session.setAttribute("classes",classes);
+
+    //md5加密。生成32位
+    private String string2MD5(String pwd) {
+        try {
+            // 生成一个MD5加密计算摘要
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            // 计算md5函数
+
+            md.update(pwd.getBytes());
+            // digest()最后确定返回md5 hash值，返回值为8为字符串。因为md5 hash值是16位的hex值，实际上就是8位的字符
+            // BigInteger函数则将8位的字符串转换成16位hex值，用字符串来表示；得到字符串形式的hash值
+            return new BigInteger(md.digest()).toString(16);
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
+    //添加用户
+    @ResponseBody
+    @RequestMapping("/addUser")
+    public String addUser(User user){
+        //对密码进行md5加密
+        //添加用户初始密码是123
+        user.setPwd(string2MD5("123"));
+
+        userServer.addUser(user);
 
         return "ok";
     }
+
+
+   // @RequestMapping("/query")
+    //public String query(HttpSession session, Classes classes){
+        //session.setAttribute("classes",classes);
+
+       // return "ok";
+    //}
 
     //验证码
     @RequestMapping("/code")

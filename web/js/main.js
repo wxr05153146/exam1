@@ -3,7 +3,7 @@ var newDate = '';
 getLangDate();
 //值小于10时，在前面补0
 function dateFilter(date){
-    if(date < 10){return "0"+date;}   
+    if(date < 10){return "0"+date;}
     return date;
 }
 function getLangDate(){

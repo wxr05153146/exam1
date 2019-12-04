@@ -103,7 +103,10 @@ layui.use(['form','layer','layedit','laydate','upload','transfer','jquery','elem
         type: 'datetime',
         trigger : "click",
         done : function(value, date, endDate){
+
             submitTime = value;
+            $("#release").val(submitTime);
+
         }
     });
     form.on("radio(release)",function(data){
@@ -152,7 +155,7 @@ layui.use(['form','layer','layedit','laydate','upload','transfer','jquery','elem
             ids.push({"id":classid[i].value});
         }
 
-        delete data.field.myfile;
+        delete datalayui.field.myfile;
 
         //获取登录用户信息
         datalayui.field.author={id:sessionStorage.getItem("uid")};
@@ -160,7 +163,7 @@ layui.use(['form','layer','layedit','laydate','upload','transfer','jquery','elem
         $.ajax({
             url:"/addMenu",
             type: 'post',//提交请求的类型
-            data:JSON.stringify({"menu":data.field,"classesList":ids}),//数据
+            data:JSON.stringify({"menu":datalayui.field,"classesList":ids,"mytime":$("#release").val()}),//数据
             dataType: 'json',//提交后台参数的类型
             contentType:"application/json",//定义数据格式是json
             success:function (data){

@@ -19,4 +19,9 @@ public interface MenuMapper {
 
     //修改置顶
     public int updateIsTop(@Param("id") long id, @Param("istop") int istop);
+
+    //批量删除
+    public int delMenu(@Param("ids") Long[] ids);
+    //定时发布
+    public int FaBu(@Param("mid")long mid);
 }

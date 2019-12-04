@@ -24,9 +24,9 @@ layui.use(['form','layer','laydate','table','laytpl'],function(){
                     return d.author.uname;
                 }},
             {field: 'ispublic', title: '发布状态',  align:'center', templet:function(d){
-                    var str="私密浏览";
-                    if(d==1){
-                        str="公开浏览"
+                    var str="定时发布";
+                    if(d.ispublic==1){
+                        str="已发布"
                     }
 
                     return str;
@@ -39,12 +39,12 @@ layui.use(['form','layer','laydate','table','laytpl'],function(){
 
                     return str;
                 }},
-            {field: 'istop', title: '是否置顶', align:'center', templet:function(d){
+            {field: 'istop', title: '是否置顶', event:'istop', align:'center', templet:function(d){
 
                     if(d.istop==1){
-                        return '<input type="checkbox"  lay-filter="newsTop" lay-skin="switch" lay-text="是|否" checked>'
+                        return '<input type="checkbox" lay-filter="newsTop" lay-skin="switch" lay-text="是|否" checked>'
                     }else {
-                        return '<input type="checkbox"  lay-filter="newsTop" lay-skin="switch" lay-text="是|否">'
+                        return '<input type="checkbox" lay-filter="newsTop" lay-skin="switch" lay-text="是|否">'
                     }
                 }},
             {field: 'opentime', title: '发布时间', align:'center', minWidth:110, templet:function(d){
@@ -54,9 +54,15 @@ layui.use(['form','layer','laydate','table','laytpl'],function(){
             {title: '操作', width:170, templet:'#newsListBar',fixed:"right",align:"center"}
         ]]
     });
+
     //是否置顶
     table.on('tool', function(obj){
         var data = obj.data;
+
+        if(obj.event!='istop'){
+            return;
+        }
+
         var index = layer.msg('修改中，请稍候',{icon: 16,time:false,shade:0.8});
         setTimeout(function(){
             layer.close(index);
@@ -73,19 +79,21 @@ layui.use(['form','layer','laydate','table','laytpl'],function(){
 
                 }
             })
+
+
+
         },500);
     })
-
 
     //搜索【此功能需要后台配合，所以暂时没有动态效果演示】
     $(".search_btn").on("click",function(){
         if($(".searchVal").val() != ''){
-            table.reload("newsListTable",{
+            table.reload("newsList",{
                 page: {
                     curr: 1 //重新从第 1 页开始
                 },
                 where: {
-                    key: $(".searchVal").val()  //搜索的关键字
+                    title: $(".searchVal").val()  //搜索的关键字
                 }
             })
         }else{
@@ -130,25 +138,29 @@ layui.use(['form','layer','laydate','table','laytpl'],function(){
 
     //批量删除
     $(".delAll_btn").click(function(){
-        var checkStatus = table.checkStatus('newsListTable'),
+        var checkStatus = table.checkStatus('newsList'),
             data = checkStatus.data,
             newsId = [];
         if(data.length > 0) {
             for (var i in data) {
-                newsId.push(data[i].newsId);
+                newsId.push(data[i].id);
             }
             layer.confirm('确定删除选中的试题？', {icon: 3, title: '提示信息'}, function (index) {
 
+                //$.ajax({}) get||post
+                //$.get({})  get
+                //$.post({}) post
 
-                 $.get("删除文章接口",{
-                    ids : newsId  //将需要删除的newsId作为参数传入
-                 },function(data){
+                $.ajax({
+                    url:"/delMenu?ids="+newsId
+                })
+
                 tableIns.reload();
                 layer.close(index);
-                 })
+
             })
         }else{
-            layer.msg("请选择需要删除的文章");
+            layer.msg("请选择需要删除的试题");
         }
     })
 
@@ -160,13 +172,16 @@ layui.use(['form','layer','laydate','table','laytpl'],function(){
         if(layEvent === 'edit'){ //编辑
             addNews(data);
         } else if(layEvent === 'del'){ //删除
-            layer.confirm('确定删除此文章？',{icon:3, title:'提示信息'},function(index){
-                // $.get("删除文章接口",{
-                //     newsId : data.newsId  //将需要删除的newsId作为参数传入
-                // },function(data){
+            layer.confirm('确定删除此试题？',{icon:3, title:'提示信息'},function(index){
+
+
+                $.ajax({
+                    url:"/delMenu?ids="+data.id
+                })
+
                 tableIns.reload();
                 layer.close(index);
-                // })
+
             });
         } else if(layEvent === 'look'){ //预览
             layer.alert("此功能需要前台展示，实际开发中传入对应的必要参数进行文章内容页面访问")

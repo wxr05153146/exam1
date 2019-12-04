@@ -6,7 +6,7 @@ layui.use(['form','layer','laydate','table','laytpl'],function(){
         laytpl = layui.laytpl,
         table = layui.table;
 
-    //新闻列表
+    //试题列表
     var tableIns = table.render({
         elem: '#newsList',
         url : '../../json/newsList.json',
@@ -62,10 +62,10 @@ layui.use(['form','layer','laydate','table','laytpl'],function(){
         }
     });
 
-    //添加文章
+    //添加试题
     function addNews(edit){
         var index = layui.layer.open({
-            title : "添加文章",
+            title : "添加试题",
             type : 2,
             content : "examAdd.html",
             success : function(layero, index){

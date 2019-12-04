@@ -9,7 +9,19 @@ public class ClassmenuVO {
     private Menu menu;//试题对象一个对象
     private List<Classes> classesList;//添加过程中有多个班级
 
+    private String mytime;//定时发布
+
+
+    public String getMytime() {
+        return mytime;
+    }
+
+    public void setMytime(String mytime) {
+        this.mytime = mytime;
+    }
+
     public Menu getMenu() {
+
         return menu;
     }
 
@@ -18,10 +30,12 @@ public class ClassmenuVO {
     }
 
     public List<Classes> getClassesList() {
+
         return classesList;
     }
 
     public void setClassesList(List<Classes> classesList) {
+
         this.classesList = classesList;
     }
 }

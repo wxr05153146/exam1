@@ -9,15 +9,18 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="format-detection" content="telephone=no">
+	<meta http-equiv="Content-Type"  content="multipart/form-data; charset=utf-8" />
 	<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
 	<link rel="stylesheet" href="../../css/public.css" media="all" />
 </head>
 <body class="childrenBody">
-<form class="layui-form layui-row layui-col-space10">
+<form class="layui-form layui-row layui-col-space10" enctype="multipart/form-data">
 	<div class="layui-col-md9 layui-col-xs12">
 		<div class="layui-row layui-col-space10">
 			<div class="layui-col-md9 layui-col-xs7">
 				<div class="layui-form-item magt3">
+					<!--当前登录者-->
+
 					<label class="layui-form-label">试题名称</label>
 					<div class="layui-input-block">
 						<input type="text" name="title" class="layui-input newsName" lay-verify="newsName" placeholder="请输入试题名称">
@@ -47,7 +50,6 @@
 					<i class="layui-icon"></i>
 					<p>点击上传，或将文件拖拽到此处</p>
 				</div>
-				<!--<textarea class="layui-textarea layui-hide" name="content" lay-verify="content" id="news_content"></textarea>-->
 			</div>
 
 			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
@@ -68,11 +70,12 @@
 				</div>
 			</div>
 
-			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-				<legend>选择考试班级</legend>
-			</fieldset>
-			<div id="test1" class="demo-transfer"></div>
+
 		</div>
+		<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+			<legend>选择考试班级</legend>
+		</fieldset>
+		<div id="test1" class="demo-transfer"  lay-verify="transferId"></div>
 	</div>
 	<div class="layui-col-md3 layui-col-xs12">
 		<blockquote class="layui-elem-quote title"><i class="seraph icon-caidan"></i> 分类目录</blockquote>
@@ -90,15 +93,17 @@
 				<div class="layui-input-block newsStatus">
 					<select  lay-verify="required">
 						<option value="0">保存草稿</option>
-						<option value="1">等待审核</option>
+						<option value="1">正常使用</option>
 					</select>
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label"><i class="layui-icon">&#xe609;</i> 发　布</label>
 				<div class="layui-input-block">
-					<input type="radio"  title="立即发布" lay-skin="primary" lay-filter="release" checked />
-					<input type="radio"  title="定时发布" lay-skin="primary" lay-filter="release" />
+				<!--	<input type="radio"   title="立即发布" lay-skin="primary" lay-filter="release" checked />
+					<input type="radio"  title="定时发布" lay-skin="primary" lay-filter="release" />-->
+					<input type="radio"  name="ispublic" value="1" title="立即发布" lay-skin="primary" lay-filter="release" checked />
+					<input type="radio"  name="ispublic" value="0" title="定时发布" lay-skin="primary" lay-filter="release" />
 				</div>
 			</div>
 			<div class="layui-form-item layui-hide releaseDate">
@@ -110,19 +115,20 @@
 			<div class="layui-form-item openness">
 				<label class="layui-form-label"><i class="seraph icon-look"></i> 公开度</label>
 				<div class="layui-input-block">
-					<input type="radio"  title="开放浏览" lay-skin="primary" checked />
-					<input type="radio"  title="私密浏览" lay-skin="primary" />
+					<input type="radio" name="ispublic" value="1" title="开放浏览" lay-skin="primary" checked />
+					<input type="radio" name="ispublic" value="0" title="私密浏览" lay-skin="primary" />
 				</div>
 			</div>
 			<div class="layui-form-item newsTop">
 				<label class="layui-form-label"><i class="seraph icon-zhiding"></i> 置　顶</label>
 				<div class="layui-input-block">
-					<input type="checkbox"  lay-skin="switch" lay-text="是|否">
+					<input type="checkbox" name="istop" value="1"  lay-skin="switch" lay-text="是|否">
 				</div>
 			</div>
 			<hr class="layui-bg-gray" />
 			<div class="layui-right">
-				<button id="test9" class="layui-btn layui-btn-sm" lay-filter="addNews" lay-submit><i class="layui-icon">&#xe609;</i>发布</button>				<!--<a class="layui-btn layui-btn-primary layui-btn-sm" lay-filter="look" lay-submit>预览</a>-->
+				<button id="test9" class="layui-btn layui-btn-sm" lay-filter="addNews" lay-submit><i class="layui-icon">&#xe609;</i>发布</button>
+				<!--<a class="layui-btn layui-btn-primary layui-btn-sm" lay-filter="look" lay-submit>预览</a>-->
 			</div>
 		</div>
 	</div>

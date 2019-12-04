@@ -2,6 +2,7 @@ package com.prj.controller.Menu;
 
 import com.prj.entity.ClassmenuVO;
 import com.prj.server.menu.MenuServer;
+
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 public class MenuController {
@@ -32,17 +33,38 @@ public class MenuController {
     }
 
 
+    //添加
     @ResponseBody
     @RequestMapping("/addMenu")
     public String addMenu(@RequestBody ClassmenuVO classmenu)throws Exception{
-       int i= menuServer.addMenu(classmenu,lastFile);
-        //判断当前试题是否置顶
 
+        //判断试题是否定时发布
+        if (classmenu.getMenu().getIspublic()==0){
+            //获取用户的时间
+            String mytime=classmenu.getMytime();
+
+            SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            Date date= dateFormat.parse(mytime);
+
+            //启动定时任务
+            //不理解，问老师
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    long mid=classmenu.getMenu().getId();
+                    menuServer.FaBu(mid);
+
+                }
+            },date);
+        }
+
+        //判断当前试题是否置顶
         if (classmenu.getMenu().getIstop()!=1){
             classmenu.getMenu().getIstop();
 
         }
-        int i1=menuServer.addMenu(classmenu,lastFile);
+        int i=menuServer.addMenu(classmenu,lastFile);
         if(i>0){
             lastFile=null;
            return "ok";
@@ -56,17 +78,22 @@ public class MenuController {
     @ResponseBody
     @RequestMapping("/upload")
     public Map<String,Object> upload(@RequestParam("myfile") MultipartFile myfile, HttpServletRequest request) throws Exception {
-
+        //判断用户是否选择文件
         if(!myfile.isEmpty()){
+            //删除上一次文件
             if(lastFile!=null){
                 lastFile.delete();
                 lastFile=null;
             }
 
+            //获取上传的地址
             String url=request.getSession().getServletContext().getRealPath("/upload/");
+            //创建文件
             File file=new File(url+System.currentTimeMillis()+myfile.getOriginalFilename());
+            //复制文件
             FileUtils.copyInputStreamToFile(myfile.getInputStream(),file);
 
+            //保留上一次文件
             lastFile=file;
         }
         Map<String,Object> map = new HashMap<String,Object>();
@@ -103,10 +130,14 @@ public class MenuController {
 
         return map;
     }
-   // @RequestMapping("/delMenu")
-    //public String delMenu(@RequestBody List ids){
+    //批量删除
+    @ResponseBody
+   @RequestMapping("/delMenu")
+    public String delMenu(Long[] ids){
+       menuServer.delMenu(ids);
 
-    //}
+       return "ok";
+    }
 
 
 }

@@ -43,11 +43,15 @@ public class MenuServerImpl implements MenuServer{
 
     @Override
     public List<Menu> queryMenu(String title) {
-        return null;
+        return menuMapper.queryMenu(title);
     }
 
     @Override
     public int addMenu(ClassmenuVO classmenu, File file) throws Exception {
+
+
+
+
 
         //生成科目ID
         long mid=System.currentTimeMillis();
@@ -147,15 +151,30 @@ public class MenuServerImpl implements MenuServer{
         }
         return i;
     }
+    //添加
     @Override
     public int addMenuClasses(Classmenu classesmenu) {
 
         return menuMapper.addMenuClasses(classesmenu);
     }
 
+    //修改
     @Override
     public int updateIsTop(long id, int istop) {
+
         return menuMapper.updateIsTop(id, istop);
+    }
+
+    //删除
+    @Override
+    public int delMenu(Long[] ids) {
+        return menuMapper.delMenu(ids);
+    }
+
+    //定时发布
+    @Override
+    public int FaBu(long mid) {
+        return menuMapper.FaBu(mid);
     }
 
 }

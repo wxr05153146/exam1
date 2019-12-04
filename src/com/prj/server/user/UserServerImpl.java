@@ -20,8 +20,15 @@ public class UserServerImpl implements UserServer {
     }
 
 
+    //登录
     @Override
     public User login(User user) {
         return userMapper.login(user);
+    }
+
+    //添加
+    @Override
+    public int addUser(User user) {
+        return userMapper.addUser(user);
     }
 }

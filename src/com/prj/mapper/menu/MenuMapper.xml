@@ -19,12 +19,20 @@
         <result column="uname" property="uname"></result>
     </resultMap>
 
+    <!--批量删除-->
+    <delete id="delMenu">
+        delete from menu where id in
+        <foreach collection="ids" open="(" close=")" separator="," item="i">
+            #{i}
+        </foreach>
+    </delete>
+
     <!--修改表-->
     <update id="updateIsTop">
         UPDATE `menu` SET istop=#{istop} WHERE id=#{id}
     </update>
 
-
+    <!--查询试题-->
     <select id="queryMenu" resultMap="menuMap">
         SELECT
         m.id,
@@ -43,6 +51,8 @@
         </if>
         ORDER BY m.istop DESC
     </select>
+
+    <!--添加试题-->
     <insert id="addMenu"   parameterType="Menu">
         INSERT INTO menu(id,title,author,url) VALUES(#{id},#{title},#{author.id},#{url})
     </insert>
@@ -52,6 +62,11 @@
     <insert id="addMenuClasses"   parameterType="Classmenu">
         INSERT INTO `classmenu`(classid,menuid) VALUES(#{classes.id},#{menu.id})
     </insert>
+
+    <!--定时任务修改发布状态-->
+    <update id="FaBu">
+        update menu set ispublic=1 where id=#{mid}
+    </update>
 
 
 </mapper>
