@@ -56,7 +56,7 @@ public class UserController {
             return "ok";
         }
 
-        return "loginError";
+        return "pwderror";
     }
 
     //md5加密。生成32位
@@ -89,12 +89,12 @@ public class UserController {
     }
 
 
-   // @RequestMapping("/query")
-    //public String query(HttpSession session, Classes classes){
-        //session.setAttribute("classes",classes);
+   @RequestMapping("/query")
+    public String query(HttpSession session, Classes classes){
+        session.setAttribute("classes",classes);
 
-       // return "ok";
-    //}
+        return "ok";
+    }
 
     //验证码
     @RequestMapping("/code")

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +22,10 @@ public class MenuServerImpl implements MenuServer{
 
 
     @Autowired
+    //科目
     private MenuMapper menuMapper;
     @Autowired
+    //试题
     private ExamMapper examMapper;
 
     public ExamMapper getExamMapper() {
@@ -46,17 +50,33 @@ public class MenuServerImpl implements MenuServer{
         return menuMapper.queryMenu(title);
     }
 
+    //添加试题
     @Override
     public int addMenu(ClassmenuVO classmenu, File file) throws Exception {
-
-
-
-
 
         //生成科目ID
         long mid=System.currentTimeMillis();
 
         classmenu.getMenu().setId(mid);
+        //试题对象
+        Menu menu1=classmenu.getMenu();
+        if(menu1.getIspublic()==0){
+            //转换
+            SimpleDateFormat sf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            java.util.Date date = null;
+
+
+            try {
+                date=sf.parse(classmenu.getMytime());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            java.sql.Timestamp dateSQL = new java.sql.Timestamp(date.getTime());
+
+
+            menu1.setOpentime(dateSQL);
+        }
+
         //添加科目
         int i=menuMapper.addMenu(classmenu.getMenu());
 
@@ -175,6 +195,12 @@ public class MenuServerImpl implements MenuServer{
     @Override
     public int FaBu(long mid) {
         return menuMapper.FaBu(mid);
+    }
+
+    //加载登录
+    @Override
+    public List<Menu> JiaZai(int id) {
+        return menuMapper.JiaZai(id);
     }
 
 }

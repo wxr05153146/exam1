@@ -29,5 +29,8 @@ public interface MenuServer {
     //定时发布
     public int FaBu(long mid);
 
+    //加载登录
+    public List<Menu>JiaZai(int id);
+
 
 }

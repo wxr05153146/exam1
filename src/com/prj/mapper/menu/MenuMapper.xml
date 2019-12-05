@@ -26,11 +26,11 @@
             #{i}
         </foreach>
     </delete>
-
-    <!--修改表-->
+    <!--是否置顶-->
     <update id="updateIsTop">
         UPDATE `menu` SET istop=#{istop} WHERE id=#{id}
     </update>
+
 
     <!--查询试题-->
     <select id="queryMenu" resultMap="menuMap">
@@ -52,9 +52,19 @@
         ORDER BY m.istop DESC
     </select>
 
+
+
     <!--添加试题-->
     <insert id="addMenu"   parameterType="Menu">
-        INSERT INTO menu(id,title,author,url) VALUES(#{id},#{title},#{author.id},#{url})
+        INSERT INTO menu(id,title,author,url,ispublic,istop,opentime,scoreTime,sumScore) VALUES(#{id},#{title},#{author.id},#{url},#{ispublic},#{istop},
+        <if test="ispublic==1">
+            (SELECT NOW())
+        </if>
+        <if test="ispublic==0">
+            #{opentime}
+        </if>
+        ,#{scoreTime},#{sumScore}
+        )
     </insert>
 
 
@@ -69,4 +79,15 @@
     </update>
 
 
+    <!--加载登录人考试列表-->
+    <select id="JiaZai" resultMap="menuMap">
+
+        SELECT m.* FROM USER u,classes c,classmenu cm,menu m
+         WHERE u.typeclass=c.id
+         AND c.id=cm.classid
+         AND m.id=cm.menuid
+         AND m.ispublic=1
+         AND u.id=#{id}
+
+    </select>
 </mapper>

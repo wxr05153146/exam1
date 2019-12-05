@@ -10,7 +10,15 @@ public class ClassmenuVO {
     private List<Classes> classesList;//添加过程中有多个班级
 
     private String mytime;//定时发布
+    private String scoreTIme;
 
+    public String getScoreTIme() {
+        return scoreTIme;
+    }
+
+    public void setScoreTIme(String scoreTIme) {
+        this.scoreTIme = scoreTIme;
+    }
 
     public String getMytime() {
         return mytime;
