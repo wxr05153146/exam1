@@ -2,6 +2,8 @@ package com.prj.controller.Menu;
 
 import com.prj.entity.ClassmenuVO;
 import com.prj.entity.Menu;
+import com.prj.entity.ResultVo;
+import com.prj.entity.User;
 import com.prj.server.menu.MenuServer;
 
 import org.apache.commons.io.FileUtils;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -25,6 +28,7 @@ public class MenuController {
     @Autowired
     @Qualifier("MenuServerImpl")
     private MenuServer menuServer;
+    //第一次文件储存
     private File lastFile;
 
     public MenuServer getMenuServer() {
@@ -43,8 +47,8 @@ public class MenuController {
         //考试总分钟
         int sum = 0;
         //考试时间转换成分钟
-        if (classmenu.getScoreTIme() != null) {
-            String scoreTime = classmenu.getScoreTIme();
+        if (classmenu.getScoreTime() != null) {
+            String scoreTime = classmenu.getScoreTime();
 
             //小时
             int xiaoshi = Integer.parseInt(scoreTime.substring(0, scoreTime.indexOf(":")));
@@ -138,11 +142,13 @@ public class MenuController {
     //查询科目信息
     @ResponseBody
     @RequestMapping("/queryMenu")
-    public Map<String, Object> queryMenu(String title) {
+    public Map<String, Object> queryMenu(String title, HttpSession session) {
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("code", "0");
-        map.put("data", menuServer.queryMenu(title));
+        //当前登录人
+        User user=(User)session.getAttribute("loginUser");
+        map.put("data", menuServer.queryMenu(title,user));
 
         return map;
     }
@@ -166,5 +172,16 @@ public class MenuController {
 
 
         return menuList;
+    }
+
+    //交卷
+    @ResponseBody
+    @RequestMapping("/submitExam")
+    public String submitExam(@RequestBody ResultVo resultVo) {
+
+        menuServer.insertResult(resultVo);
+
+
+        return "ok";
     }
 }

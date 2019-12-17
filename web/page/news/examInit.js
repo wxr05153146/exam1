@@ -16,7 +16,7 @@ layui.use(['form','layer','jquery'],function(){
  		return false;
  	})
 
-	//获取当前登录
+	//获取当前登录人姓名 班级
 	$("#myname").html(sessionStorage.getItem("uname"));
  	$("#classesName").html(sessionStorage.getItem("classesName"));
 

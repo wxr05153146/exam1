@@ -29,6 +29,10 @@ layui.use(['bodyTab','form','element','layer','jquery'],function(){
                 if(sessionStorage.getItem("userRid")==2){
                     contentManagement.push(data.contentManagement[2]);
                 }
+				//老师
+				if (sessionStorage.getItem("userRid")==3){
+					contentManagement=data.contentManagement;
+				}
 
 				dataStr = contentManagement;
 				//重新渲染左侧菜单
@@ -44,6 +48,11 @@ layui.use(['bodyTab','form','element','layer','jquery'],function(){
 				if(sessionStorage.getItem("userRid")==2){
 
 				}
+				//老师
+				if (sessionStorage.getItem("userRid")==3){
+
+				}
+
 				dataStr = data.memberCenter;
 				//重新渲染左侧菜单
 				tab.render();

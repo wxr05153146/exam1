@@ -9,6 +9,9 @@ layui.use(['form','layer','jquery'],function(){
         });
     })*/
 
+
+
+
     //表单提交之前
     form.on("submit",function(datalayui){
         $(this).text("登录中...").attr("disabled","disabled").addClass("layui-disabled");

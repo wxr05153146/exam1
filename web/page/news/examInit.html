@@ -37,30 +37,28 @@
 					<td pc>
 						<label class="layui-form-label">请选择考试</label>
 						<div class="layui-input-inline">
-							<select name="modules" lay-verify="required" lay-search="">
-								<option value="1">java基础</option>
-								<option value="2">循环</option>
-								<option value="3">面向对象</option>
+							<select id="mids" name="modules" lay-verify="required" lay-search="">
+
 							</select>
 						</div>
 					</td>
 		    	</tr>
 		    	<tr>
 		    		<td>考试时间</td>
-		    		<td pc>90分钟</td>
+					<td id="scoreTime" pc></td>
 		    	</tr>
 		    	<tr>
 		    		<td>总分</td>
-		    		<td pc>100</td>
+					<td id="sumScore" pc></td>
 		    	</tr>
-		    	<tr>
-		    		<td>身份证号</td>
-		    		<td pc>12345678912345678x</td>
-		    	</tr>
-		    	<tr>
-		    		<td>准考证号</td>
-		    		<td pc>13288135</td>
-		    	</tr>
+				<tr>
+					<td>班级</td>
+					<td id="classesName" pc>12345678912345678x</td>
+				</tr>
+				<tr>
+					<td>姓名</td>
+					<td id="myname" pc></td>
+				</tr>
 		    	<!--<tr>
 		    		<td>最大上传限制</td>
 		    		<td><input type="text" class="layui-input maxUpload" placeholder="请输入最大上传限制"></td>

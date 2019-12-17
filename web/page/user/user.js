@@ -6,12 +6,34 @@ layui.use(['form','layer','laydate','table','laytpl'],function(){
         laytpl = layui.laytpl,
         table = layui.table;
 
+    //提交表单
+    form.on('submit',function(layuidate) {
+        $.ajax({
+            url: "/updatePwd",
+            data: {"id": sessionStorage.getItem("uid"), "oldPwd": $("#oldPwd").val(), "newPwd": $("#newPwd").val()},
+            success: function (data) {
+                layer.msg(data.msg);
+
+                if("修改密码成功"==data.msg){
+                    window.sessionStorage.clear();
+                    window.localStorage.clear();
+                    setTimeout(function(){
+                        window.top.location.href="http://localhost:8080";//直接访问服务器，过滤器自动弹出登录
+                    },1000);
+                }
+            }
+        })
+      return false;
+})
+
+
+
     //添加验证规则
     form.verify({
         oldPwd : function(value, item){
-            if(value != "123456"){
+           /* if(value != "123456"){
                 return "密码错误，请重新输入！";
-            }
+            }*/
         },
         newPwd : function(value, item){
             if(value.length < 6){
@@ -88,5 +110,4 @@ layui.use(['form','layer','laydate','table','laytpl'],function(){
     $("body").on("click",".layui-table-body.layui-table-main tbody tr td",function(){
         $(this).find(".layui-table-edit").addClass("layui-"+$(this).attr("align"));
     });
-
 })

@@ -13,12 +13,11 @@
 	<link rel="stylesheet" href="../../css/public.css" media="all" />
 </head>
 <body class="childrenBody">
-<form class="layui-form">
 	<!--第二步：建立视图。用于呈现渲染结果。-->
 	<div id="view">
 
 	</div>
-
+	<form class="layui-form">
 
 	<div class="magt10 layui-center">
 		<div class="layui-btn-container">
@@ -46,18 +45,17 @@
 </fieldset>
 <blockquote class="layui-elem-quote" style="margin-top: 10px;font-size: 36px;">
 	<div id="mytime">
-		总分:100
-		考试时间90分钟:
+
 	</div>
 </blockquote>
 <script type="text/javascript" src="../../layui/layui.js"></script>
 <script type="text/javascript" src="../../js/cache.js"></script>
 
-<script id="demo1" type="text/html">
-	{{#  layui.each(d, function(index, item){ }}
-	<button type="button" onclick="show_page({{index}})" class="layui-btn">第{{index+1}}题</button>
-	{{#  }); }}
-</script>
+	<script id="demo1" type="text/html">
+		{{#  layui.each(d, function(index, item){ }}
+		<button type="button" onclick="show_page({{index}})" class="layui-btn">第{{index+1}}题</button>
+		{{#  }); }}
+	</script>
 
 
 <!--第一步：编写模版。你可以使用一个script标签存放模板，如：-->
@@ -132,7 +130,7 @@
             document.getElementById("mytime").innerHTML=mytimeHtml+"<span>"+hour+"时"+minute+"分"+second+"秒</span>";
 
             if(minute==JSON.parse(sessionStorage.getItem("menu")).scoreTime){
-                document.getElementById("scoreform").submit();
+				document.getElementById("scoreform").submit();
             }
         },1000);
 
@@ -149,7 +147,7 @@
         var getTpl = document.getElementById("demo").innerHTML;//获取模板对象中的html
 
         $.ajax({
-            url:"/query/"+JSON.parse(sessionStorage.getItem("menu")).id,
+            url:"/queryExam/"+JSON.parse(sessionStorage.getItem("menu")).id,
             success:function (jsondata) {
 
                 var infos=[];
@@ -203,11 +201,9 @@
 				//循环学生选择答案
 				for (var i=0;i<sumPage;i++) {
 					//每道题的5个按钮
-					var radios = document.getElementById("choose" + i);
+					var radios = document.getElementsByName("choose" + i);
 
 					for (var j = 0; j < radios.length; j++) {
-
-
 						if (radios[j].checked) {
 							choosex.push(radios[j].value);
 							break;
@@ -230,13 +226,14 @@
 					contentType:"application/json",//定义数据格式是json
 					success:function (data) {
 						if ("ok"==data) {
-							parent.location.reload();
+
 						}else {
 							layer.msg("交卷失败请联系管理员");
 						}
 					}
 				})
 
+				parent.location.reload();
 
             }, function(index){
 

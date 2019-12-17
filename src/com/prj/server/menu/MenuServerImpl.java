@@ -3,18 +3,21 @@ package com.prj.server.menu;
 import com.prj.entity.*;
 import com.prj.mapper.exam.ExamMapper;
 import com.prj.mapper.menu.MenuMapper;
-import org.apache.ibatis.jdbc.Null;
+
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.io.File;
 import java.io.FileInputStream;
-import java.text.ParseException;
+
 import java.text.SimpleDateFormat;
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service("MenuServerImpl")
@@ -46,8 +49,8 @@ public class MenuServerImpl implements MenuServer{
 
 
     @Override
-    public List<Menu> queryMenu(String title) {
-        return menuMapper.queryMenu(title);
+    public List<Menu> queryMenu(String title,User user) {
+        return menuMapper.queryMenu(title,user);
     }
 
     //添加试题
@@ -201,6 +204,60 @@ public class MenuServerImpl implements MenuServer{
     @Override
     public List<Menu> JiaZai(int id) {
         return menuMapper.JiaZai(id);
+    }
+
+    //交卷
+    @Override
+    public int insertResult(ResultVo resultVo) {
+        //获取学生选择的答案
+        String DaAn="";
+        //学生提交的答案
+        List<String>choosex=resultVo.getChoosex();
+
+        for (String str:choosex){
+            DaAn+=str;
+
+        }
+
+        //获取结果对象对象
+        Result result=resultVo.getResult();
+        //存入答案列中
+        result.setInfo(DaAn);
+
+        //获取当前考试时间时间
+        Date date=new Date();
+
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        //把时间转换成字符串
+        result.setTime(dateFormat.format(date));
+
+        //查询此次考试正确答案
+         List<Exam> examList= menuMapper.queryExamDaAn(result.getMenu().getId());
+
+        //总分数
+        int sumScore=0;
+
+        //判卷
+        for(int i=0;i<choosex.size();i++){
+            //获取当前正确答案
+
+            String answer=examList.get(i).getAnswer();
+
+            if("A".equals(answer)&&choosex.get(i).equals("1")){
+                sumScore+=10;
+            }else if("B".equals(answer)&&choosex.get(i).equals("2")){
+                sumScore+=10;
+            }else if("C".equals(answer)&&choosex.get(i).equals("3")){
+                sumScore+=10;
+            }else if("D".equals(answer)&&choosex.get(i).equals("4")){
+                sumScore+=10;
+            }
+
+        }
+        //最后得分
+        result.setResult(sumScore);
+        return menuMapper.insertResult(result);
     }
 
 }

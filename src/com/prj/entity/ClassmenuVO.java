@@ -10,14 +10,14 @@ public class ClassmenuVO {
     private List<Classes> classesList;//添加过程中有多个班级
 
     private String mytime;//定时发布
-    private String scoreTIme;
+    private String scoreTime;
 
-    public String getScoreTIme() {
-        return scoreTIme;
+    public String getScoreTime() {
+        return scoreTime;
     }
 
-    public void setScoreTIme(String scoreTIme) {
-        this.scoreTIme = scoreTIme;
+    public void setScoreTime(String scoreTime) {
+        this.scoreTime = scoreTime;
     }
 
     public String getMytime() {

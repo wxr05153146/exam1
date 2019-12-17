@@ -31,4 +31,16 @@ public class UserServerImpl implements UserServer {
     public int addUser(User user) {
         return userMapper.addUser(user);
     }
+
+    //修改密码
+    @Override
+    public int updatePwd(int id, String newpwd) {
+        return userMapper.updatePwd(id,newpwd);
+    }
+
+    //上传头像
+    @Override
+    public int userUpload(String url, int uid) {
+        return userMapper.userUpload(url,uid);
+    }
 }

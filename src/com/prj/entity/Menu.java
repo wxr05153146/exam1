@@ -18,8 +18,17 @@ public class Menu {
   private int istop;
   private int scoreTime;
   private int sumScore;
+  //老师的私有考题
+  private int isprivate;
 
 
+  public int getIsprivate() {
+    return isprivate;
+  }
+
+  public void setIsprivate(int isprivate) {
+    this.isprivate = isprivate;
+  }
 
   public long getId() {
     return id;

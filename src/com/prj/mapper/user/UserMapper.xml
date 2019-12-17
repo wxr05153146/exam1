@@ -7,6 +7,8 @@
     <resultMap id="userMap" type="User">
         <id column="id" property="id"></id>
         <result column="uname" property="uname"></result>
+        <result column="pwd" property="pwd"></result>
+        <result column="url" property="url"></result>
         <association property="role" resultMap="roleMap" javaType="Role"></association>
         <association property="classes" resultMap="ClassMap" javaType="Classes"></association>
     </resultMap>
@@ -21,15 +23,26 @@
         <id column="rid" property="id"></id>
         <result column="rname" property="rname"></result>
     </resultMap>
+
     <!--班级map-->
     <resultMap id="ClassMap" type="Classes">
         <id column="id" property="id"></id>
         <result column="classesName" property="classesName"></result>
     </resultMap>
+
     <!--登录-->
     <select id="login"  resultMap="userMap" parameterType="User">
    SELECT u.*,r.id rid,c.id cid,r.rname,c.classesName FROM `user` u,role r,classes c WHERE u.rid=r.id AND c.id=u.typeclass AND  uname=#{uname} AND pwd=#{pwd}
     </select>
+
+    <!--修改密码-->
+    <update id="updatePwd">
+        UPDATE `user` SET pwd=#{newpwd} WHERE id=#{id}
+    </update>
+    <!--上传头像-->
+    <update id="userUpload">
+        UPDATE `user` SET url=#{url} WHERE id=#{uid}
+    </update>
 
 </mapper>
 
